@@ -123,25 +123,47 @@ function moveBall() {
     }
     
       // Brick collision
-  bricks.forEach(column => {
-    column.forEach(brick => {
-      if (brick.visible) {
-        if (
-          ball.x - ball.size > brick.x && // left brick side check
-          ball.x + ball.size < brick.x + brick.w && // right brick side check
-          ball.y + ball.size > brick.y && // top brick side check
-          ball.y - ball.size < brick.y + brick.h // bottom brick side check
-        ) {
-          ball.dy *= -1;
-          brick.visible = false;
-
+    bricks.forEach(column => {
+      column.forEach(brick => {
+        if (brick.visible) {
+            if (
+            ball.x - ball.size > brick.x && // left brick side check
+            ball.x + ball.size < brick.x + brick.w && // right brick side check
+            ball.y + ball.size > brick.y && // top brick side check
+            ball.y - ball.size < brick.y + brick.h // bottom brick side check
+            ) {
+            ball.dy *= -1;
+            brick.visible = false;
+            
+            increaseScore()
+            }
         }
-      }
     });
 
   });
+
+  //if the ball miss the paddle we start over
+  if (ball.y + ball.size > canvas.height) {
+    showAllBricks();
+    score = 0;
+  }
 }
 
+// Increase score
+function increaseScore() {
+    score++;
+  
+    if (score % (brickRowCount * brickColumnCount) === 0) {
+      showAllBricks();
+    }
+}
+  
+// Make all bricks appear
+function showAllBricks() {
+    bricks.forEach(column => {
+      column.forEach(brick => (brick.visible = true));
+    });
+}
 // Draw everything
 function draw() {
    // clear canvas
